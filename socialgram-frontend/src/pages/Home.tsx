@@ -1,20 +1,21 @@
 import React from 'react'
 import styled from 'styled-components';
+import Post from '../components/post-section/Post';
 import Profile from '../components/profile-section/Profile';
 
 const Wrapper = styled.div`
   display: grid;
   position: relative;
-  grid-template-columns: 18rem auto 22rem;
-  background: #f1f1f1;
+  grid-template-columns: 19rem auto 21rem;
+  background: #e3e3e3;
 `;
 
 
 const Home = () => {
   return (
     <Wrapper>
-      <div><Profile /></div>
-      <div>post</div>
+      <Profile />
+      <Post />
       <div>trends</div>
     </Wrapper>
   )

@@ -31,6 +31,11 @@ const Button = styled.button`
   outline: none;
   border: none;
   background: orangered;
+  &:hover {
+    color: orangered;
+    border: 1px solid orangered;
+    background: white;
+  }
 `;
 
 
