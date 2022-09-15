@@ -6,9 +6,7 @@ const Wrapper = styled.div`
   display: grid;
   position: relative;
   grid-template-columns: 18rem auto 22rem;
-  gap: 1rem;
-  font-size: 1.5em;
-  color: palevioletred;
+  background: #f1f1f1;
 `;
 
 
