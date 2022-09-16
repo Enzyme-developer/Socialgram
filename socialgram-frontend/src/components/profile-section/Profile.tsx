@@ -7,15 +7,14 @@ import Search from '../profile-components/Search';
 const Main= styled.div`
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
   padding: 1rem;
+  overflow: auto;
 `;
 
 
 const Profile = () => {
   return (
     <Main>
-        <div><h2>Socialgram</h2></div>
         <Search />
         <ProfileCard />
         <Followers />

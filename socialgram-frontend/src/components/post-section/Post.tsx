@@ -1,6 +1,7 @@
 import React from 'react'
 import styled from 'styled-components';
-import HiPhoto, { HiPhotograph } from 'react-icons/hi'
+import { HiPhotograph } from 'react-icons/hi'
+import SinglePost from './SinglePost';
 
 
 const PostWrapper = styled.div`
@@ -67,6 +68,14 @@ const Button = styled.button`
 `;
 
 
+const Singlepost = styled.div`
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+`;
+
+
+
 const Post = () => {
   return (
     <PostWrapper>
@@ -79,25 +88,28 @@ const Post = () => {
         <Media>
           <div style={{textAlign: 'center'}}>
             <HiPhotograph style={{fontSize: '20px', color: 'green'}} />
-            <p>Photo</p>
+            <p style={{fontSize: '0.8rem'}}>Photo</p>
           </div>
           <div style={{textAlign: 'center'}}>
             <HiPhotograph style={{fontSize: '20px', color: 'blue'}} />
-            <p>Video</p>
+            <p style={{fontSize: '0.8rem'}}>Video</p>
           </div>
           <div style={{textAlign: 'center'}}>
             <HiPhotograph style={{fontSize: '20px', color: 'red'}} />
-            <p>Location</p>
+            <p style={{fontSize: '0.8rem'}}>Location</p>
           </div>
           <div style={{textAlign: 'center'}}>
             <HiPhotograph style={{fontSize: '20px', color: 'orange'}} />
-            <p>Schedule</p>
+            <p style={{fontSize: '0.8rem'}}>Schedule</p>
           </div>
           <Button>Share</Button>
         </Media>
       </SharedWrapper>
 
-      {/* <Sharedpost></Sharedpost> */}
+      <Singlepost>
+        <SinglePost />
+        <SinglePost />
+      </Singlepost>
     </PostWrapper>
   )
 }

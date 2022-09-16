@@ -6,18 +6,17 @@ import styled from 'styled-components';
 const Searchdiv = styled.div`
   display: flex;
   width: 100%;
-  margin-top: 1rem;
   align-items: center;
   background-color: white;
-  justify-content: space-between;
   border-radius: 10px;
   height: 30px;
 `;
 
 const Input = styled.input`
   border: none;
-  font-size: 1rem;
+  font-size: 14px;
   outline: none;
+  background: transparent;
   padding: 5px;
   border-radius: 10px;
 `;
@@ -26,8 +25,8 @@ const Input = styled.input`
 const Search = () => {
   return (
     <Searchdiv>
+      <BiSearch style={{ color: 'blue', fontSize: '25px', padding: '4px' }}/>
       <Input type='text' placeholder='search' value={''} />
-      <div style={{ cursor: 'pointer', height: '30px', backgroundColor: 'orangered' }}><BiSearch style={{ color: 'white', fontSize: '25px', padding: '4px' }}/></div>
     </Searchdiv>
   )
 }

@@ -1,12 +1,17 @@
+:root{
+  --purple: #4a4eb7;
+}
+
+*,html,:root {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
 .App {
   overflow: hidden;
   color: black;
   font-family: 'Fira Sans', sans-serif;
   text-align: center;
-}
-
-*,html, root {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
+  background: #e3e3e3;
 }
