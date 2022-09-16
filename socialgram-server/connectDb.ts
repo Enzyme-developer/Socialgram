@@ -1,10 +1,7 @@
 import mongoose from 'mongoose'
 
-const connectDb = (uri) => {
-    mongoose.connect(uri, {
-
-    })
-    console.log('database connected')
-}
+const connectDb = (url) => {
+    return mongoose.connect(url)
+  } 
 
 export default connectDb;
