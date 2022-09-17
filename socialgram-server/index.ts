@@ -1,5 +1,5 @@
-const connectDb = require('./db/connect')
 const express = require('express');
+const connectDb = require('./db/connect')
 require('dotenv').config()
 
 
@@ -8,7 +8,12 @@ app.use(express.json())
 // app.use(express.urlencoded())
 
 
-const PORT = process.env.PORT || 3000;
+app.get('/', (req: Request, res: { send: (arg0: string) => void; }) => {
+    res.send('Express + TypeScript Server');
+  });
+
+
+const PORT = process.env.PORT || 5000;
 
 const start = async () => {
     try {

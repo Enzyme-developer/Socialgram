@@ -1,12 +1,13 @@
 const mongoose = require('mongoose')
 
 //connect database
-const connectDb = (uri) => {
+const connectDb = (uri: any) => {
   return mongoose.connect(uri, {
     useNewUrlParser: true,
-    useUnifiedTopology: true,  
+    useUnifiedTopology: true,
   }, () => console.log('database connected'))
 
 }  
 
-module.exports = connectDb
+module.exports = connectDb;
+export {};
