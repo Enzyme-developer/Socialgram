@@ -1,25 +1,22 @@
-import express from 'express'
-import bodyParser from 'body-parser'
-import mongoose from 'mongoose'
-import * as dotenv from 'dotenv'
-dotenv.config()
-// import connectDb from './connectDb'
+const connectDb = require('./db/connect')
+const express = require('express');
+require('dotenv').config()
 
 
 const app = express()
-
 app.use(express.json())
-app.use(express.urlencoded())
+// app.use(express.urlencoded())
 
-const PORT = 3000
+
+const PORT = process.env.PORT || 3000;
+
 const start = async () => {
-    // try {
-    //     await connectDb(process.env.MONGO_URI)
-
-    // } catch (error) {
-    //     console.log(error);
-    // }
-    app.listen(PORT || 3000, () => console.log('server is listening')) 
+    try {
+        await connectDb(process.env.MONGO_URI)
+        app.listen(PORT, () => console.log(`server is listening on ${PORT}`))
+    } catch (error) {
+        console.log(error);
+    } 
 }
 
 start();
