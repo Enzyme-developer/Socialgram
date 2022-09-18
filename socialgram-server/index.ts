@@ -3,9 +3,10 @@ const connectDb = require('./db/connect')
 require('dotenv').config()
 
 
+//middleware
 const app = express()
 app.use(express.json())
-// app.use(express.urlencoded())
+
 
 
 app.get('/', (req: Request, res: { send: (arg0: string) => void; }) => {

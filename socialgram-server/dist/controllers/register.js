@@ -8,23 +8,5 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-const express = require('express');
-const connectDb = require('./db/connect');
-require('dotenv').config();
-//middleware
-const app = express();
-app.use(express.json());
-app.get('/', (req, res) => {
-    res.send('Express + TypeScript Server');
+const registerNewUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
 });
-const PORT = process.env.PORT || 5000;
-const start = () => __awaiter(void 0, void 0, void 0, function* () {
-    try {
-        yield connectDb(process.env.MONGO_URI);
-        app.listen(PORT, () => console.log(`server is listening on ${PORT}`));
-    }
-    catch (error) {
-        console.log(error);
-    }
-});
-start();

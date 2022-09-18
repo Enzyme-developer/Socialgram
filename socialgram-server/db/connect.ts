@@ -6,7 +6,6 @@ const connectDb = (uri: any) => {
     useNewUrlParser: true,
     useUnifiedTopology: true,
   }, () => console.log('database connected'))
-
 }  
 
 module.exports = connectDb;
