@@ -9,30 +9,23 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const express = require('express');
-const connectDb = require('./db/connect');
-require('dotenv').config();
+const User = require('../models/userModel');
+const UnauthenticatedError = require('../errors/Unauthorized');
+const BadRequestError = require('../errors/Badrequest');
+const bcrypt = require('bcrypt');
 require('express-async-errors');
-const notFound = require('./middleware/notFound');
-const errorHandlerMiddleware = require('./middleware/errorHandler');
-const authRoute = require('./routes/auth');
-const app = express();
-app.use(express.json());
-app.use('/', authRoute);
-//middleware
-app.get('/', (req, res) => {
-    res.send('hello world');
-});
-app.use(notFound);
-app.use(errorHandlerMiddleware);
-const PORT = process.env.PORT || 5000;
-const start = () => __awaiter(void 0, void 0, void 0, function* () {
-    try {
-        yield connectDb(process.env.MONGO_URI);
-        app.listen(PORT, () => console.log(`server is listening on ${PORT}`));
+const loginUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { username, password } = req.body;
+    if (!username || !password) {
+        throw new BadRequestError('Please provide required credentials');
     }
-    catch (error) {
-        console.log(error);
+    const foundUser = yield User.findOne({ username: username });
+    if (foundUser) {
+        const isValid = yield bcrypt.compare(password, foundUser.password);
+        isValid ? res.status(200).json(foundUser) : res.status(400).json('Wrong Password');
+    }
+    else {
+        throw new UnauthenticatedError('User does not exist');
     }
 });
-start();
+module.exports = loginUser;

@@ -1,8 +1,9 @@
 "use strict";
 const mongoose = require('mongoose');
-const userSchema = mongoose.Schema({
+const UserSchema = new mongoose.Schema({
     username: {
         type: String,
+        unique: true,
         required: true
     },
     firstname: {
@@ -21,14 +22,13 @@ const userSchema = mongoose.Schema({
         type: Boolean,
         default: false
     },
-    relationShipStatus: {
-        type: String,
-    },
-    worksAt: {
-        type: String,
-    },
+    relationShipStatus: String,
+    worksAt: String,
+    livesIn: String,
+    about: String,
+    profilePicture: String,
+    coverPicture: String,
     followers: [],
     followings: []
 }, { timestamps: true });
-const userModel = mongoose.model('Users', userSchema);
-exports.module = userModel;
+module.exports = mongoose.model('User', UserSchema);
