@@ -16,13 +16,16 @@ require('express-async-errors');
 const notFound = require('./middleware/notFound');
 const errorHandlerMiddleware = require('./middleware/errorHandler');
 const authRoute = require('./routes/auth');
+const userRoute = require('./routes/user');
 const app = express();
 app.use(express.json());
+//Routes
 app.use('/', authRoute);
-//middleware
+app.use('/user', userRoute);
 app.get('/', (req, res) => {
     res.send('hello world');
 });
+//Middlewares
 app.use(notFound);
 app.use(errorHandlerMiddleware);
 const PORT = process.env.PORT || 5000;

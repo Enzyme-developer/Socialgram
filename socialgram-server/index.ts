@@ -5,18 +5,23 @@ require('express-async-errors');
 const notFound = require('./middleware/notFound');
 const errorHandlerMiddleware = require('./middleware/errorHandler');
 const authRoute = require('./routes/auth')
+const userRoute = require('./routes/user')
 
 const app = express()
 app.use(express.json());
 
 
+//Routes
 app.use('/', authRoute)
+app.use('/user', userRoute)
 
-//middleware
+
 app.get('/', (req: any, res:any) => {
     res.send('hello world')
 })
 
+
+//Middlewares
 app.use(notFound);
 app.use(errorHandlerMiddleware);
 

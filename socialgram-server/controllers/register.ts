@@ -1,6 +1,5 @@
 const User = require('../models/userModel')
 const BadRequestError = require('../errors/Badrequest')
-const UnauthenticatedError = require('../errors/Unauthorized')
 const bcrypt = require('bcrypt')
 require('express-async-errors');
 

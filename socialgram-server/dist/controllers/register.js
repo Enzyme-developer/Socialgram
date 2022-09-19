@@ -11,7 +11,6 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 const User = require('../models/userModel');
 const BadRequestError = require('../errors/Badrequest');
-const UnauthenticatedError = require('../errors/Unauthorized');
 const bcrypt = require('bcrypt');
 require('express-async-errors');
 const registerNewUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
