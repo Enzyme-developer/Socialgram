@@ -44,6 +44,7 @@ const updateUser = async (req: { params: { id: string; }; body: { currentUserId:
 const deleteUser = async (req: { params: { id: string }; body: { currentUserId: string; currentUserIsAdmin: string; password: string } }, res: { status: (arg0: number) => { (): any; new(): any; json: { (arg0: string): void; new(): any } } }) => {
     const id = req.params.id
     const { currentUserId, currentUserIsAdmin } = req.body
+
     //check if user is the owner of the account or if user is an admin
     if (id == currentUserId || currentUserIsAdmin) {
         const foundUserToDelete = await User.findByIdAndRemove(id)
@@ -57,4 +58,30 @@ const deleteUser = async (req: { params: { id: string }; body: { currentUserId: 
 }
 
 
-module.exports = { getUser, updateUser, deleteUser }
+//follow a user
+const followUser = async (req: { params: { id: string }; body: { currentUserId: string } }, res: { status: (arg0: number) => { (): any; new(): any; json: { (arg0: string): void; new(): any }; send: { (arg0: string): void; new(): any } } }) => {
+    //id of user to be followed
+    const id = req.params.id
+    //id of current user 
+    const { currentUserId } = req.body
+    
+    if (id === currentUserId) {
+        res.status(403).json('Action Forbidden')
+    } else {
+        const followed = await User.findById(id)
+        const follower = await User.findById(currentUserId)
+
+        //update the follower and followed arrays of followers and follows
+        if (!followed.followers.includes(currentUserId)) {
+            await followed.updateOne({$push : {followers : currentUserId } })
+            await follower.updateOne({ $push: { followings : id } })
+            res.status(200).send('User followed succesfully')
+        } else {
+            res.status(403).send('User is already followed')
+        }
+    }
+
+}
+
+
+module.exports = { getUser, updateUser, deleteUser, followUser }

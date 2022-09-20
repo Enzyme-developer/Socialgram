@@ -70,4 +70,27 @@ const deleteUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
         throw new UnauthenticatedError('Unauthorized user');
     }
 });
-module.exports = { getUser, updateUser, deleteUser };
+//follow a user
+const followUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    //id of user to be followed
+    const id = req.params.id;
+    //id of current user 
+    const { currentUserId } = req.body;
+    if (id === currentUserId) {
+        res.status(403).json('Action Forbidden');
+    }
+    else {
+        const followed = yield User.findById(id);
+        const follower = yield User.findById(currentUserId);
+        //update the follower and followed arrays of followers and follows
+        if (!followed.followers.includes(currentUserId)) {
+            yield followed.updateOne({ $push: { followers: currentUserId } });
+            yield follower.updateOne({ $push: { followings: id } });
+            res.status(200).send('User followed succesfully');
+        }
+        else {
+            res.status(403).send('User is already followed');
+        }
+    }
+});
+module.exports = { getUser, updateUser, deleteUser, followUser };
