@@ -93,4 +93,28 @@ const followUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
         }
     }
 });
-module.exports = { getUser, updateUser, deleteUser, followUser };
+//unfollow user
+//follow a user
+const unfollowUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    //id of user to be followed
+    const id = req.params.id;
+    //id of current user 
+    const { currentUserId } = req.body;
+    if (id === currentUserId) {
+        res.status(403).json('Action Forbidden');
+    }
+    else {
+        const followed = yield User.findById(id);
+        const follower = yield User.findById(currentUserId);
+        //update the follower and followed arrays of followers and follows
+        if (followed.followers.includes(currentUserId) && follower.followings.includes(id)) {
+            yield followed.updateOne({ $pull: { followers: currentUserId } });
+            yield follower.updateOne({ $pull: { followings: id } });
+            res.status(200).send('User unfollowed succesfully');
+        }
+        else {
+            res.status(403).send('You do not follow this user');
+        }
+    }
+});
+module.exports = { getUser, updateUser, deleteUser, followUser, unfollowUser };

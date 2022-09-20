@@ -80,8 +80,33 @@ const followUser = async (req: { params: { id: string }; body: { currentUserId: 
             res.status(403).send('User is already followed')
         }
     }
-
 }
 
 
-module.exports = { getUser, updateUser, deleteUser, followUser }
+//unfollow user
+//follow a user
+const unfollowUser = async (req: { params: { id: string }; body: { currentUserId: string } }, res: { status: (arg0: number) => { (): any; new(): any; json: { (arg0: string): void; new(): any }; send: { (arg0: string): void; new(): any } } }) => {
+    //id of user to be followed
+    const id = req.params.id
+    //id of current user 
+    const { currentUserId } = req.body
+    
+    if (id === currentUserId) {
+        res.status(403).json('Action Forbidden')
+    } else {
+        const followed = await User.findById(id)
+        const follower = await User.findById(currentUserId)
+
+        //update the follower and followed arrays of followers and follows
+        if (followed.followers.includes(currentUserId) && follower.followings.includes(id)) {
+            await followed.updateOne({$pull : {followers : currentUserId } })
+            await follower.updateOne({$pull : { followings : id } })
+            res.status(200).send('User unfollowed succesfully')
+        } else {
+            res.status(403).send('You do not follow this user')
+        }
+    }
+}
+
+
+module.exports = { getUser, updateUser, deleteUser, followUser, unfollowUser }
