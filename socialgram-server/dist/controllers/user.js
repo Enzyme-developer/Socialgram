@@ -83,7 +83,7 @@ const followUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
         const followed = yield User.findById(id);
         const follower = yield User.findById(currentUserId);
         //update the follower and followed arrays of followers and follows
-        if (!followed.followers.includes(currentUserId)) {
+        if (!followed.followers.includes(currentUserId) && !follower.followings.includes(id)) {
             yield followed.updateOne({ $push: { followers: currentUserId } });
             yield follower.updateOne({ $push: { followings: id } });
             res.status(200).send('User followed succesfully');

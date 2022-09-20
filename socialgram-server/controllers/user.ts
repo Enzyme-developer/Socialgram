@@ -72,7 +72,7 @@ const followUser = async (req: { params: { id: string }; body: { currentUserId: 
         const follower = await User.findById(currentUserId)
 
         //update the follower and followed arrays of followers and follows
-        if (!followed.followers.includes(currentUserId)) {
+        if (!followed.followers.includes(currentUserId) && !follower.followings.includes(id)) {
             await followed.updateOne({$push : {followers : currentUserId } })
             await follower.updateOne({ $push: { followings : id } })
             res.status(200).send('User followed succesfully')
