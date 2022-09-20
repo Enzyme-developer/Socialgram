@@ -19,9 +19,11 @@ var __rest = (this && this.__rest) || function (s, e) {
         }
     return t;
 };
-Object.defineProperty(exports, "__esModule", { value: true });
 const User = require('../models/userModel');
 const BadRequestError = require('../errors/Badrequest');
+const UnauthenticatedError = require('../errors/Unauthorized');
+const bcrypt = require('bcrypt');
+//get user
 const getUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const id = req.params.id;
     //check if id exist
@@ -34,4 +36,38 @@ const getUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         throw new BadRequestError('User not found');
     }
 });
-module.exports = getUser;
+//update user
+const updateUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const id = req.params.id;
+    const { currentUserId, currentUserIsAdmin, password } = req.body;
+    if (id == currentUserId || currentUserIsAdmin) {
+        //update new password
+        if (password) {
+            const salt = yield bcrypt.genSalt(10);
+            req.body.password = yield bcrypt.hash(password, salt);
+        }
+        const foundUserToUpdate = yield User.findByIdAndUpdate(id, req.body, { new: true, runValidators: true, });
+        if (foundUserToUpdate) {
+            res.status(200).json(foundUserToUpdate);
+        }
+    }
+    else {
+        throw new UnauthenticatedError('Unauthorized user');
+    }
+});
+//delete user
+const deleteUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const id = req.params.id;
+    const { currentUserId, currentUserIsAdmin } = req.body;
+    //check if user is the owner of the account or if user is an admin
+    if (id == currentUserId || currentUserIsAdmin) {
+        const foundUserToDelete = yield User.findByIdAndRemove(id);
+        if (foundUserToDelete) {
+            res.status(200).json('User deleted successfully');
+        }
+    }
+    else {
+        throw new UnauthenticatedError('Unauthorized user');
+    }
+});
+module.exports = { getUser, updateUser, deleteUser };
