@@ -10,15 +10,39 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const Post = require('../models/postModel');
+const User = require('../models/userModel');
 const UnauthenticatedError = require('../errors/Unauthorized');
 const BadRequestError = require('../errors/Badrequest');
+const mongoose = require('mongoose');
 const createPost = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const post = yield Post.create(req.body);
     res.status(200).json('post created');
 });
-const getAllPosts = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const allPosts = yield Post.find({});
-    res.status(200).json(allPosts);
+const getTimelinePosts = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const userId = req.params.id;
+    const currentUserPosts = yield Post.find({ userId: userId });
+    const followingPosts = yield User.aggregate([
+        {
+            $match: {
+                _id: new mongoose.Types.ObjectId(userId)
+            }
+        },
+        {
+            $lookup: {
+                from: 'posts',
+                localField: 'followings',
+                foreignField: 'userId',
+                as: 'followingPosts'
+            }
+        },
+        {
+            $project: {
+                followingPosts: 1,
+                _id: 0
+            }
+        }
+    ]);
+    res.status(200).json(currentUserPosts.concat(followingPosts));
 });
 const getSinglePost = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const id = req.params.id;
@@ -63,14 +87,19 @@ const deletePost = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
 const likePost = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const id = req.params.id;
     const { userId } = req.body;
-    const post = yield Post.findById(id);
-    if (!post.likes.includes(userId)) {
-        yield post.updateOne({ $push: { likes: userId } });
-        res.status(200).json('post liked');
+    if (userId) {
+        const post = yield Post.findById(id);
+        if (!post.likes.includes(userId)) {
+            yield post.updateOne({ $push: { likes: userId } });
+            res.status(200).json('post liked');
+        }
+        else {
+            yield post.updateOne({ $pull: { likes: userId } });
+            res.status(200).json('post unliked');
+        }
     }
     else {
-        yield post.updateOne({ $pull: { likes: userId } });
-        res.status(200).json('post unliked');
+        throw new BadRequestError('Not a user');
     }
 });
-module.exports = { createPost, getSinglePost, getAllPosts, deletePost, updatePost, likePost };
+module.exports = { createPost, getSinglePost, getTimelinePosts, deletePost, updatePost, likePost };

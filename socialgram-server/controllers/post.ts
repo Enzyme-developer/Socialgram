@@ -1,6 +1,8 @@
 const Post = require('../models/postModel')
+const User = require('../models/userModel')
 const UnauthenticatedError = require('../errors/Unauthorized')
 const BadRequestError = require('../errors/Badrequest')
+const mongoose = require('mongoose')
 
 
 const createPost = async (req: { body: any }, res: { status: (arg0: number) => { (): any; new(): any; json: { (arg0: any): void; new(): any } } }) => {
@@ -10,10 +12,36 @@ const createPost = async (req: { body: any }, res: { status: (arg0: number) => {
 
 
 
-const getAllPosts = async (req: { params: { id: string; }; }, res: { status: (arg0: number) => { (): any; new(): any; json: { (arg0: string): void; new(): any; }; }; }) => {
-    const allPosts = await Post.find({})
-    res.status(200).json(allPosts)
+const getTimelinePosts = async (req: { params: { id: string } }, res: { status: (arg0: number) => { (): any; new(): any; json: { (arg0: unknown): void; new(): any; }; }; }) => {
+    const userId  = req.params.id
+
+    const currentUserPosts = await Post.find({ userId: userId })
+    const followingPosts = await User.aggregate([
+        {
+            $match: {
+                _id : new mongoose.Types.ObjectId(userId)
+            }
+        },
+        {
+            $lookup: {
+                from: 'posts',
+                localField: 'followings',
+                foreignField: 'userId',
+                as: 'followingPosts'
+            }
+        }, 
+        {
+            $project : {
+                followingPosts : 1,
+                _id : 0
+            }
+        }
+    ])
+
+    res.status(200).json(currentUserPosts.concat(followingPosts))
+
 }
+
 
 
 
@@ -67,16 +95,20 @@ const likePost = async (req: { params: { id: string; }; body: { userId: string; 
     const id = req.params.id
     const { userId } = req.body
     
-    const post = await Post.findById(id)
-    if (!post.likes.includes(userId)) {
-        await post.updateOne({ $push: { likes: userId } })
-        res.status(200).json('post liked')
-    } else {
-        await post.updateOne({ $pull: { likes: userId } })
-        res.status(200).json('post unliked')
+    if (userId) {
+        const post = await Post.findById(id)
+        if (!post.likes.includes(userId)) {
+            await post.updateOne({ $push: { likes: userId } })
+            res.status(200).json('post liked')
+        } else {
+            await post.updateOne({ $pull: { likes: userId } })
+            res.status(200).json('post unliked')
+        } 
+    }  else {
+        throw new BadRequestError('Not a user')  
     }
 }
 
 
 export {} 
-module.exports = { createPost, getSinglePost, getAllPosts, deletePost, updatePost, likePost }
+module.exports = { createPost, getSinglePost, getTimelinePosts, deletePost, updatePost, likePost }
