@@ -84,7 +84,6 @@ const followUser = async (req: { params: { id: string }; body: { currentUserId: 
 
 
 //unfollow user
-//follow a user
 const unfollowUser = async (req: { params: { id: string }; body: { currentUserId: string } }, res: { status: (arg0: number) => { (): any; new(): any; json: { (arg0: string): void; new(): any }; send: { (arg0: string): void; new(): any } } }) => {
     //id of user to be followed
     const id = req.params.id

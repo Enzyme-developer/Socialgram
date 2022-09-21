@@ -94,7 +94,6 @@ const followUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
     }
 });
 //unfollow user
-//follow a user
 const unfollowUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     //id of user to be followed
     const id = req.params.id;

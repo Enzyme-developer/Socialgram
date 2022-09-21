@@ -11,6 +11,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 const User = require('../models/userModel');
 const BadRequestError = require('../errors/Badrequest');
+const UnauthenticatedError = require('../errors/Unauthorized');
 const bcrypt = require('bcrypt');
 require('express-async-errors');
 const registerNewUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
@@ -27,4 +28,18 @@ const registerNewUser = (req, res) => __awaiter(void 0, void 0, void 0, function
         res.status(200).json('user Registered successfully');
     }
 });
-module.exports = registerNewUser;
+const loginUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { username, password } = req.body;
+    if (!username || !password) {
+        throw new BadRequestError('Please provide required credentials');
+    }
+    const foundUser = yield User.findOne({ username: username });
+    if (foundUser) {
+        const isValid = yield bcrypt.compare(password, foundUser.password);
+        isValid ? res.status(200).json(foundUser) : res.status(400).json('Wrong Password');
+    }
+    else {
+        throw new UnauthenticatedError('User does not exist');
+    }
+});
+module.exports = { registerNewUser, loginUser };
