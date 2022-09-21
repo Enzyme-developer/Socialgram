@@ -7,7 +7,7 @@ const PostSchema = new mongoose.Schema(
     likes: [],
     image: String,
   },
-  { timestamp: true }
+  { timestamps: true }
 );
 
 export {};

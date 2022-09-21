@@ -42,7 +42,8 @@ const getTimelinePosts = (req, res) => __awaiter(void 0, void 0, void 0, functio
             }
         }
     ]);
-    res.status(200).json(currentUserPosts.concat(followingPosts));
+    res.status(200).json(currentUserPosts.concat(followingPosts[0].followingPosts)
+        .sort((a, b) => { return b.createdAt - a.createdAt; }));
 });
 const getSinglePost = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const id = req.params.id;

@@ -38,7 +38,8 @@ const getTimelinePosts = async (req: { params: { id: string } }, res: { status: 
         }
     ])
 
-    res.status(200).json(currentUserPosts.concat(followingPosts))
+    res.status(200).json(currentUserPosts.concat(followingPosts[0].followingPosts)
+        .sort((a: { createdAt: number }, b: { createdAt: number }) => { return b.createdAt - a.createdAt  }))
 
 }
 
