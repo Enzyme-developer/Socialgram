@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react'
+import React, { useState } from 'react'
 import styled from 'styled-components';
 import { HiPhotograph } from 'react-icons/hi'
 import SinglePost from './SinglePost';
@@ -11,7 +11,6 @@ const PostWrapper = styled.div`
   padding: 1rem;
   height: 100vh;
   overflow: auto;
-  --webkit-scroll-bar :: none;
 `;
 
 const SharedWrapper = styled.div`
@@ -134,6 +133,8 @@ const Post = () => {
       }
 
       <Singlepost>
+        <SinglePost />
+        <SinglePost />
         <SinglePost />
         <SinglePost />
       </Singlepost>

@@ -16,3 +16,7 @@
   text-align: center;
   background: var(--purple);
 }
+
+::-webkit-scrollbar {
+  display: none;
+}
