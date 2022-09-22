@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useRef, useState } from 'react'
 import styled from 'styled-components';
 import { HiPhotograph } from 'react-icons/hi'
 import SinglePost from './SinglePost';
@@ -9,6 +9,9 @@ const PostWrapper = styled.div`
   flex-direction: column;
   align-items: center;
   padding: 1rem;
+  height: 100vh;
+  overflow: auto;
+  --webkit-scroll-bar :: none;
 `;
 
 const SharedWrapper = styled.div`
@@ -76,7 +79,21 @@ const Singlepost = styled.div`
 
 
 
+
 const Post = () => {
+
+  const [image, setImage] = useState<null | { image: string }>(null)
+  const imageRef =  React.useRef() as React.MutableRefObject<HTMLInputElement>;
+
+  const onImageChange = (e: any) => {
+    if (e.target.files && e.target.files[0]) {
+        let img = e.target.files[0]
+        setImage({
+          image : URL.createObjectURL(img)
+        })
+      }
+  }
+
   return (
     <PostWrapper>
       <SharedWrapper>
@@ -86,7 +103,7 @@ const Post = () => {
         </Share>
 
         <Media>
-          <div style={{textAlign: 'center'}}>
+          <div style={{textAlign: 'center'}} onClick={()=> imageRef.current.click()}>
             <HiPhotograph style={{fontSize: '20px', color: 'green'}} />
             <p style={{fontSize: '0.8rem'}}>Photo</p>
           </div>
@@ -103,8 +120,18 @@ const Post = () => {
             <p style={{fontSize: '0.8rem'}}>Schedule</p>
           </div>
           <Button>Share</Button>
+          <div>
+            <input type="file" ref={imageRef} onChange={onImageChange} />
+          </div>
         </Media>
       </SharedWrapper>
+
+      {image && 
+        <div>
+          <p style={{color: 'green'}}  onClick={() => setImage(null)}>close</p>
+          <img src={image.image} alt="preview" />
+        </div>
+      }
 
       <Singlepost>
         <SinglePost />

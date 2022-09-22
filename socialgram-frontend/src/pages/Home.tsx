@@ -1,7 +1,7 @@
 import React from 'react'
 import styled from 'styled-components';
-import Post from '../components/post-section/Post';
-import Profile from '../components/profile-section/Profile';
+import Post from '../components/post/Post';
+import Profile from '../components/profile/Profile';
 
 const Wrapper = styled.div`
   display: grid;

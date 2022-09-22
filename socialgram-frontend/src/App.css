@@ -11,7 +11,8 @@
 .App {
   overflow: hidden;
   color: black;
+  padding: 1rem;
   font-family: 'Fira Sans', sans-serif;
   text-align: center;
-  background: #e3e3e3;
+  background: var(--purple);
 }
