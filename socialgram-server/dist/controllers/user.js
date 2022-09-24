@@ -19,6 +19,7 @@ var __rest = (this && this.__rest) || function (s, e) {
         }
     return t;
 };
+Object.defineProperty(exports, "__esModule", { value: true });
 const User = require('../models/userModel');
 const BadRequestError = require('../errors/Badrequest');
 const UnauthenticatedError = require('../errors/Unauthorized');

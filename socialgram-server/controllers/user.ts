@@ -54,7 +54,6 @@ const deleteUser = async (req: { params: { id: string }; body: { currentUserId: 
     } else {
         throw new UnauthenticatedError('Unauthorized user')
     }
-
 }
 
 
@@ -108,4 +107,6 @@ const unfollowUser = async (req: { params: { id: string }; body: { currentUserId
 }
 
 
+
+export {}
 module.exports = { getUser, updateUser, deleteUser, followUser, unfollowUser }

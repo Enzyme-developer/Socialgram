@@ -13,6 +13,7 @@ const User = require('../models/userModel');
 const BadRequestError = require('../errors/Badrequest');
 const UnauthenticatedError = require('../errors/Unauthorized');
 const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
 require('express-async-errors');
 const registerNewUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { username, firstname, lastname, password } = req.body;
@@ -20,12 +21,16 @@ const registerNewUser = (req, res) => __awaiter(void 0, void 0, void 0, function
         throw new BadRequestError('Please provide required credentials');
     }
     else {
+        const userExist = yield User.findOne({ username });
+        if (userExist) {
+            throw new BadRequestError('User already exists');
+        }
         //hash and salt password
         const salt = yield bcrypt.genSalt(10);
         const hashedPassword = yield bcrypt.hash(password, salt);
         const newUser = new User({ username, firstname, lastname, password: hashedPassword });
         yield newUser.save();
-        res.status(200).json('user Registered successfully');
+        res.status(200).json({ username, token: generateToken(newUser._id) });
     }
 });
 const loginUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
@@ -36,10 +41,14 @@ const loginUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const foundUser = yield User.findOne({ username: username });
     if (foundUser) {
         const isValid = yield bcrypt.compare(password, foundUser.password);
-        isValid ? res.status(200).json(foundUser) : res.status(400).json('Wrong Password');
+        isValid ? res.status(200).json({ foundUser, token: generateToken(foundUser._id) }) : res.status(400).json('Wrong Credentials, please try again');
     }
     else {
         throw new UnauthenticatedError('User does not exist');
     }
 });
+//Generate jwt 
+const generateToken = (id) => {
+    return jwt.sign({ id }, process.env.JWT_SECRET, { expiresIn: '30d' });
+};
 module.exports = { registerNewUser, loginUser };

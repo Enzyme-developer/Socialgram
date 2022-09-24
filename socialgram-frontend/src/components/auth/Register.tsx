@@ -4,11 +4,14 @@ import { Link } from 'react-router-dom'
 const Register = () => {
   const initialState = {
     username : '',
-    password : ''
+    firstname : '',
+    lastname : '',
+    password : '',
+    confirmPassword : ''
   }
   
   const [formData, setFormData] = useState(initialState)
-  const { username, password } = formData
+  const { username, firstname, lastname, password, confirmPassword } = formData
 
 
   const onChange = (e: any) => {
@@ -27,9 +30,12 @@ const Register = () => {
   return (
     <form onSubmit={submit}>
         <input type='text' placeholder='first name' name='username' value={username} onChange={onChange} />
+        <input type='text' placeholder='first name' name='firstname' value={firstname} onChange={onChange}/>
+        <input type='text' placeholder='first name' name='lastname' value={lastname} onChange={onChange} />
         <input type='password' placeholder='password' name='password' value={password} onChange={onChange} />
+        <input type='password' placeholder='confirm password' name='confirmPassword' value={confirmPassword} onChange={onChange} />
         <button type='submit'>Sign up</button>
-        <Link to='/login'>Don't have an account? Register</Link>
+        <Link to='/login'>Already have an account? log in</Link>
     </form>
   )
 }

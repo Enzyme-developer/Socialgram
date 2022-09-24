@@ -8,6 +8,7 @@ const authRoute = require('./routes/auth')
 const userRoute = require('./routes/user')
 const postRoute = require('./routes/post')
 
+
 const app = express()
 app.use(express.json());
 
