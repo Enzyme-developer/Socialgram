@@ -10,12 +10,13 @@ const Register = () => {
     username : '',
     firstname : '',
     lastname : '',
-    password : ''
+    password : '',
+    confirmPassword: ''
   }
 
   
   const [formData, setFormData] = useState(initialState)
-  const { username, firstname, lastname, password } = formData
+  const { username, firstname, lastname, password, confirmPassword } = formData
 
   const navigate = useNavigate()
   const dispatch = useDispatch()
@@ -27,12 +28,10 @@ const Register = () => {
     if(isError) {
       alert(message)
     }
-
     if (isSuccess) {
-      // navigate('/')
+      navigate('/login')
       alert('Im am in')
     }
-
     dispatch(reset)
 
   }, [user, isError, isSuccess, message, navigate, dispatch])
@@ -48,10 +47,14 @@ const Register = () => {
 
   const submit = (e) => {
     e.preventDefault()
-
-      const userData = { username, firstname, password, lastname}
+    if (password === confirmPassword) {
+      const userData = { username, firstname, password, lastname }
       dispatch(register(userData))
+    } else {
+      alert('passwords do not match')
+    }
   }
+  
   
   return (
     <form onSubmit={submit}>
@@ -59,7 +62,7 @@ const Register = () => {
         <input type='text' placeholder='first name' name='firstname' value={firstname} onChange={onChange}/>
         <input type='text' placeholder='first name' name='lastname' value={lastname} onChange={onChange} />
         <input type='password' placeholder='password' name='password' value={password.toString()} onChange={onChange} />
-        {/* <input type='password' placeholder='confirm password' name='confirmPassword' value={confirmPassword} onChange={onChange} /> */}
+        <input type='password' placeholder='confirm password' name='confirmPassword' value={confirmPassword} onChange={onChange} />
         <button type='submit'>Sign up</button>
         <Link to='/login'>Already have an account? log in</Link>
     </form>

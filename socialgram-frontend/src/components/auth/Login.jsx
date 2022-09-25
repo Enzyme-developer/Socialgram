@@ -16,7 +16,6 @@ const Register = () => {
   const { username, password } = formData
 
   
-
   const navigate = useNavigate()
   const dispatch = useDispatch()
 
@@ -47,13 +46,10 @@ const Register = () => {
   
   const submit = (e) => {
     e.preventDefault()
-    const userData = {
-      username,
-      password,
-    }
-
+    const userData = { username, password }
     dispatch(login(userData))
   }
+  
   
   return (
     <form onSubmit={submit}>
