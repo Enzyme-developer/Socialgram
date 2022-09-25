@@ -18,10 +18,13 @@ const errorHandlerMiddleware = require('./middleware/errorHandler');
 const authRoute = require('./routes/auth');
 const userRoute = require('./routes/user');
 const postRoute = require('./routes/post');
+const cors = require('cors');
 const app = express();
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+app.use(cors());
 //Routes
-app.use('/', authRoute);
+app.use('/api/user', authRoute);
 app.use('/user', userRoute);
 app.use('/post', postRoute);
 app.get('/', (req, res) => {

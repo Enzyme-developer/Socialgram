@@ -29,7 +29,6 @@ const registerNewUser = async (req: { body: { username: string; firstname: strin
 
 
 
-
 const loginUser = async (req: { body: { username: string; password: string } }, res: { status: (arg0: number) => { (): any; new(): any; json: { (arg0: any): any; new(): any } } }) => {
     const { username, password } = req.body
 
