@@ -1,4 +1,6 @@
-import React from 'react'
+import React, { useEffect } from 'react'
+import { useNavigate } from 'react-router-dom'
+import { useSelector } from 'react-redux';
 import styled from 'styled-components';
 import Post from '../components/post/Post';
 import Profile from '../components/profile/Profile';
@@ -13,6 +15,18 @@ const Wrapper = styled.div`
 
 
 const Home = () => {
+
+  const navigate = useNavigate()
+  const { user } = useSelector((state: any) => state.auth)
+
+  
+  useEffect(() => {
+    if (!user) {
+      navigate('/login')
+    }
+  }, [user, navigate])
+  
+
   return (
     <Wrapper>
       <Profile />
